@@ -81,5 +81,45 @@ galton_heights %>%
 # Question 5 - v shaped scatter
 
 # Question 6
-0.5 ^2
+rho <- 0.5
+rho^2
 
+# Question 7
+sd_father <- 2 # inches
+sd_son <- 3 # inches
+m1 <-  rho * sd_son / sd_father
+m1*71 - m1*70 #If father is one inch taller, son?
+
+#********* Assessment: Stratification and Variance Explained, Part 2 *******
+set.seed(1989, sample.kind="Rounding") #if you are using R 3.6 or later
+library(HistData)
+data("GaltonFamilies")
+female_heights <- GaltonFamilies%>%     
+  filter(gender == "female") %>%     
+  group_by(family) %>%     
+  sample_n(1) %>%     
+  ungroup() %>%     
+  select(mother, childHeight) %>%     
+  rename(daughter = childHeight)
+# Question 8
+mu_x <- mean(female_heights$mother)
+s_x <- sd(female_heights$mother)
+mu_y <- mean(female_heights$daughter)
+s_y <- sd(female_heights$daughter)
+r <- cor(female_heights$mother,female_heights$daughter)
+
+# Question 9
+m <-  r * s_y / s_x
+b <- mu_y - m * mu_x
+(b + m*61) - (b + m*60)
+
+# Question 10
+r^2 # %age of outcome explained
+s_y*sqrt(1-r*2) # Conditional standard deviation of the daughters' heights
+s_y^2 # variance of the daughters' heights
+s_y^2 * (1-r^2) # conditional variance of the daughters' heights
+1-r*2
+
+# Question 11
+b + m*61
+mu_y + r*((60 - mu_x)/s_x) * s_y # same outcome as above
